@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD 2-Clause
 pragma solidity ^0.5.0;
 
 import "./ENS.sol";
@@ -22,7 +23,8 @@ contract ENSRegistryWithFallback is ENSRegistry {
      * @param node The specified node.
      * @return address of the resolver.
      */
-    function resolver(bytes32 node) public view returns (address) {
+    /// Solidity: Missing override specifier
+    function resolver(bytes32 node) override public view returns (address) {
         if (!recordExists(node)) {
             return old.resolver(node);
         }
@@ -35,7 +37,8 @@ contract ENSRegistryWithFallback is ENSRegistry {
      * @param node The specified node.
      * @return address of the owner.
      */
-    function owner(bytes32 node) public view returns (address) {
+    /// Solidity: Missing override specifier
+    function owner(bytes32 node) override public view returns (address) {
         if (!recordExists(node)) {
             return old.owner(node);
         }
@@ -48,7 +51,8 @@ contract ENSRegistryWithFallback is ENSRegistry {
      * @param node The specified node.
      * @return ttl of the node.
      */
-    function ttl(bytes32 node) public view returns (uint64) {
+    /// Solidity: Missing override specifier
+    function ttl(bytes32 node) override public view returns (uint64) {
         if (!recordExists(node)) {
             return old.ttl(node);
         }
@@ -56,7 +60,7 @@ contract ENSRegistryWithFallback is ENSRegistry {
         return super.ttl(node);
     }
 
-    function _setOwner(bytes32 node, address owner) internal {
+    function _setOwner(bytes32 node, address owner) override internal {
         address addr = owner;
         if (addr == address(0x0)) {
             addr = address(this);
