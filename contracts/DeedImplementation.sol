@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD 2-Clause
 pragma solidity ^0.5.0;
 
 import "./Deed.sol";
@@ -32,26 +33,32 @@ contract DeedImplementation is Deed {
         _;
     }
 
-    constructor(address payable initialOwner) public payable {
+    /// Solidity upgrade: Warning on ignored constructor
+    /// visibility.
+    constructor(address payable initialOwner) payable {
         _owner = initialOwner;
         _registrar = msg.sender;
-        _creationDate = now;
+        /// Solidity upgrade: `now` changed to `block.timestamp`
+        _creationDate = block.timestamp;
         active = true;
         _value = msg.value;
     }
 
-    function setOwner(address payable newOwner) external onlyRegistrar {
+    /// Solidity upgrade: Function missing override specifier
+    function setOwner(address payable newOwner) override external onlyRegistrar {
         require(newOwner != address(0x0));
         _previousOwner = _owner;  // This allows contracts to check who sent them the ownership
         _owner = newOwner;
         emit OwnerChanged(newOwner);
     }
 
-    function setRegistrar(address newRegistrar) external onlyRegistrar {
+    /// Solidity upgrade: Function missing override specifier
+    function setRegistrar(address newRegistrar) override external onlyRegistrar {
         _registrar = newRegistrar;
     }
 
-    function setBalance(uint newValue, bool throwOnFailure) external onlyRegistrar onlyActive {
+    /// Solidity upgrade: Function missing override specifier
+    function setBalance(uint newValue, bool throwOnFailure) override external onlyRegistrar onlyActive {
         // Check if it has enough balance to set the value
         require(_value >= newValue);
         _value = newValue;
@@ -64,7 +71,8 @@ contract DeedImplementation is Deed {
      *
      * @param refundRatio The amount*1/1000 to refund
      */
-    function closeDeed(uint refundRatio) external onlyRegistrar onlyActive {
+    /// Solidity upgrade: Function missing override specifier
+    function closeDeed(uint refundRatio) override external onlyRegistrar onlyActive {
         active = false;
         require(burn.send(((1000 - refundRatio) * address(this).balance)/1000));
         emit DeedClosed();
@@ -74,24 +82,30 @@ contract DeedImplementation is Deed {
     /**
      * @dev Close a deed and refund a specified fraction of the bid value
      */
-    function destroyDeed() external {
+    /// Solidity upgrade: Function missing override specifier
+    function destroyDeed() override external {
         _destroyDeed();
     }
 
-    function owner() external view returns (address) {
+    /// Solidity upgrade: Function missing override identifier
+    function owner() override external view returns (address) {
         return _owner;
     }
 
-    function previousOwner() external view returns (address) {
+    /// Solidity upgrade: Function missing override identifier
+    function previousOwner() override external view returns (address) {
         return _previousOwner;
     }
 
-    function value() external view returns (uint) {
+    /// Solidity upgrade: Function missing override specifier
+    function value() override external view returns (uint) {
         return _value;
     }
 
-    function creationDate() external view returns (uint) {
-        _creationDate;
+    /// Solidity upgrade: Function missing override specifier
+    function creationDate() override external view returns (uint) {
+        /// Solidity upgrade: Missing return statement
+        return _creationDate;
     }
 
     function _destroyDeed() internal {
