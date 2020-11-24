@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: BSD 2-Clause
 pragma solidity ^0.5.0;
 
 import "./ENS.sol";
@@ -37,7 +38,8 @@ contract ENSRegistry is ENS {
      * @param resolver The address of the resolver.
      * @param ttl The TTL in seconds.
      */
-    function setRecord(bytes32 node, address owner, address resolver, uint64 ttl) external {
+    /// Solidity: Missing override specifier
+    function setRecord(bytes32 node, address owner, address resolver, uint64 ttl) override external {
         setOwner(node, owner);
         _setResolverAndTTL(node, resolver, ttl);
     }
@@ -50,7 +52,8 @@ contract ENSRegistry is ENS {
      * @param resolver The address of the resolver.
      * @param ttl The TTL in seconds.
      */
-    function setSubnodeRecord(bytes32 node, bytes32 label, address owner, address resolver, uint64 ttl) external {
+    /// Solidity: Missing override specifier
+    function setSubnodeRecord(bytes32 node, bytes32 label, address owner, address resolver, uint64 ttl) override external {
         bytes32 subnode = setSubnodeOwner(node, label, owner);
         _setResolverAndTTL(subnode, resolver, ttl);
     }
@@ -60,7 +63,8 @@ contract ENSRegistry is ENS {
      * @param node The node to transfer ownership of.
      * @param owner The address of the new owner.
      */
-    function setOwner(bytes32 node, address owner) public authorised(node) {
+    /// Solidity: Missing override specifier
+    function setOwner(bytes32 node, address owner) override public authorised(node) {
         _setOwner(node, owner);
         emit Transfer(node, owner);
     }
@@ -71,7 +75,8 @@ contract ENSRegistry is ENS {
      * @param label The hash of the label specifying the subnode.
      * @param owner The address of the new owner.
      */
-    function setSubnodeOwner(bytes32 node, bytes32 label, address owner) public authorised(node) returns(bytes32) {
+    /// Solidity: Missing override specifier
+    function setSubnodeOwner(bytes32 node, bytes32 label, address owner) override public authorised(node) returns(bytes32) {
         bytes32 subnode = keccak256(abi.encodePacked(node, label));
         _setOwner(subnode, owner);
         emit NewOwner(node, label, owner);
@@ -83,7 +88,8 @@ contract ENSRegistry is ENS {
      * @param node The node to update.
      * @param resolver The address of the resolver.
      */
-    function setResolver(bytes32 node, address resolver) public authorised(node) {
+    /// Solidity: Missing override specifier
+    function setResolver(bytes32 node, address resolver) override public authorised(node) {
         emit NewResolver(node, resolver);
         records[node].resolver = resolver;
     }
@@ -93,7 +99,8 @@ contract ENSRegistry is ENS {
      * @param node The node to update.
      * @param ttl The TTL in seconds.
      */
-    function setTTL(bytes32 node, uint64 ttl) public authorised(node) {
+    /// Solidity: Missing override specifier
+    function setTTL(bytes32 node, uint64 ttl) override public authorised(node) {
         emit NewTTL(node, ttl);
         records[node].ttl = ttl;
     }
@@ -104,7 +111,8 @@ contract ENSRegistry is ENS {
      * @param operator Address to add to the set of authorized operators.
      * @param approved True if the operator is approved, false to revoke approval.
      */
-    function setApprovalForAll(address operator, bool approved) external {
+    /// Solidity: Missing override specifier
+    function setApprovalForAll(address operator, bool approved) override external {
         operators[msg.sender][operator] = approved;
         emit ApprovalForAll(msg.sender, operator, approved);
     }
@@ -114,7 +122,8 @@ contract ENSRegistry is ENS {
      * @param node The specified node.
      * @return address of the owner.
      */
-    function owner(bytes32 node) public view returns (address) {
+    /// Solidity: Missing override and virtual specifiers
+    function owner(bytes32 node) override virtual public view returns (address) {
         address addr = records[node].owner;
         if (addr == address(this)) {
             return address(0x0);
@@ -128,7 +137,8 @@ contract ENSRegistry is ENS {
      * @param node The specified node.
      * @return address of the resolver.
      */
-    function resolver(bytes32 node) public view returns (address) {
+    /// Solidity: Missing override and virtual specifiers
+    function resolver(bytes32 node) override virtual public view returns (address) {
         return records[node].resolver;
     }
 
@@ -137,7 +147,8 @@ contract ENSRegistry is ENS {
      * @param node The specified node.
      * @return ttl of the node.
      */
-    function ttl(bytes32 node) public view returns (uint64) {
+    /// Solidity: Missing override and virtual specifiers
+    function ttl(bytes32 node) override virtual public view returns (uint64) {
         return records[node].ttl;
     }
 
@@ -146,7 +157,8 @@ contract ENSRegistry is ENS {
      * @param node The specified node.
      * @return Bool if record exists
      */
-    function recordExists(bytes32 node) public view returns (bool) {
+    /// Solidity: Missing override specifier
+    function recordExists(bytes32 node) override public view returns (bool) {
         return records[node].owner != address(0x0);
     }
 
@@ -156,11 +168,12 @@ contract ENSRegistry is ENS {
      * @param operator The address that acts on behalf of the owner.
      * @return True if `operator` is an approved operator for `owner`, false otherwise.
      */
-    function isApprovedForAll(address owner, address operator) external view returns (bool) {
+    /// Solidity: Missing override specifier
+    function isApprovedForAll(address owner, address operator) override external view returns (bool) {
         return operators[owner][operator];
     }
 
-    function _setOwner(bytes32 node, address owner) internal {
+    function _setOwner(bytes32 node, address owner) virtual internal {
         records[node].owner = owner;
     }
 
