@@ -206,7 +206,7 @@ contract HashRegistrar is Registrar {
         // Send the canceller 0.5% of the bid, and burn the rest.
         bid.setOwner(msg.sender);
         bid.closeDeed(5);
-        sealedBids[bidder][seal] = Deed(0);
+        sealedBids[bidder][seal] = Deed(address(0));
         emit BidRevealed(seal, bidder, 0, 5);
     }
 
@@ -257,7 +257,7 @@ contract HashRegistrar is Registrar {
 
         h.value = 0;
         h.highestBid = 0;
-        h.deed = Deed(0);
+        h.deed = Deed(address(0));
 
         _tryEraseSingleNode(_hash);
         deedContract.closeDeed(1000);
@@ -299,7 +299,7 @@ contract HashRegistrar is Registrar {
 
         h.value = 0;
         h.highestBid = 0;
-        h.deed = Deed(0);
+        h.deed = Deed(address(0));
     }
 
     /**
@@ -340,7 +340,7 @@ contract HashRegistrar is Registrar {
         Registrar(registrar).acceptRegistrarTransfer(_hash, h.deed, h.registrationDate);
 
         // Zero out the Entry
-        h.deed = Deed(0);
+        h.deed = Deed(address(0));
         h.registrationDate = 0;
         h.value = 0;
         h.highestBid = 0;
