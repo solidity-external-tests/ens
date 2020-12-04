@@ -9,7 +9,7 @@ import "./Deed.sol";
  */
 contract DeedImplementation is Deed {
 
-    address payable constant burn = address(0xdead);
+    address payable constant burn = payable(address(0xdead));
 
     address payable private _owner;
     address private _previousOwner;

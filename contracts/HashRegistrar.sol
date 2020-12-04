@@ -204,7 +204,7 @@ contract HashRegistrar is Registrar {
         require(address(bid) != address(0x0) && block.timestamp >= bid.creationDate() + totalAuctionLength + 2 weeks);
 
         // Send the canceller 0.5% of the bid, and burn the rest.
-        bid.setOwner(msg.sender);
+        bid.setOwner(payable(msg.sender));
         bid.closeDeed(5);
         sealedBids[bidder][seal] = Deed(address(0));
         emit BidRevealed(seal, bidder, 0, 5);
@@ -291,7 +291,7 @@ contract HashRegistrar is Registrar {
             // The previous owner gets 50%
             h.value = max(h.value, minPrice);
             h.deed.setBalance(h.value/2, false);
-            h.deed.setOwner(msg.sender);
+            h.deed.setOwner(payable(msg.sender));
             h.deed.closeDeed(1000);
         }
 
@@ -462,7 +462,7 @@ contract HashRegistrar is Registrar {
         require(msg.value >= minPrice);
 
         // Creates a new hash contract with the owner
-        Deed bid = (new DeedImplementation){value: msg.value}(msg.sender);
+        Deed bid = (new DeedImplementation){value: msg.value}(payable(msg.sender));
         sealedBids[msg.sender][sealedBid] = bid;
         emit NewBid(sealedBid, msg.sender, msg.value);
     }
